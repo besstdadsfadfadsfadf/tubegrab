@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>TubeGrab — Téléchargez vos vidéos YouTube en MP4 ou MP3</title>
+  <meta name="description" content="TubeGrab vous permet de télécharger des vidéos YouTube en MP4 ou MP3 en quelques secondes. Compatible PC, Android et iPhone. Aucune installation nécessaire.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="TubeGrab — Téléchargez vos vidéos YouTube en MP4 ou MP3">
+  <meta property="og:description" content="Collez un lien YouTube, choisissez MP4 ou MP3, et téléchargez en quelques secondes. Compatible PC, Android et iPhone. Aucune installation nécessaire.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tubegrab.app">
+  <meta property="og:image" content="https://tubegrab.app/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TubeGrab — YouTube vers MP4 ou MP3">
+  <meta name="twitter:description" content="Téléchargez vos vidéos YouTube en MP4 ou MP3 en quelques secondes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ================================================
+       DESIGN TOKENS & THEME SYSTEM
+    ================================================ */
+    :root {
+      --bg:           #FFFFFF;
+      --bg-secondary: #F8FAFC;
+      --bg-tertiary:  #F1F5F9;
+      --text:         #0F172A;
+      --text-muted:   #64748B;
+      --accent:       #4F46E5;
+      --accent-hover: #4338CA;
+      --accent-light: rgba(79,70,229,0.10);
+      --accent-glow:  rgba(79,70,229,0.30);
+      --border:       #E2E8F0;
+      --card-bg:      #FFFFFF;
+      --card-hover:   #F8FAFC;
+      --shadow-sm:    rgba(0,0,0,0.06);
+      --shadow:       rgba(0,0,0,0.10);
+      --shadow-lg:    rgba(0,0,0,0.14);
+      --header-bg:    rgba(255,255,255,0.88);
+      --glass-bg:     rgba(255,255,255,0.75);
+      --glass-border: rgba(255,255,255,0.90);
+      --input-bg:     #F8FAFC;
+      --orb-a:        rgba(79,70,229,0.14);
+      --orb-b:        rgba(99,102,241,0.09);
+      --orb-c:        rgba(139,92,246,0.07);
+      --step-line:    #E2E8F0;
+      --radius-sm:    10px;
+      --radius:       14px;
+      --radius-lg:    20px;
+      --radius-xl:    24px;
+    }
+
+    [data-theme="dark"] {
+      --bg:           #09101E;
+      --bg-secondary: #0F1829;
+      --bg-tertiary:  #0B1220;
+      --text:         #F1F5F9;
+      --text-muted:   #8FA3BF;
+      --accent:       #6366F1;
+      --accent-hover: #818CF8;
+      --accent-light: rgba(99,102,241,0.14);
+      --accent-glow:  rgba(99,102,241,0.35);
+      --border:       #1A2840;
+      --card-bg:      #111D30;
+      --card-hover:   #172238;
+      --shadow-sm:    rgba(0,0,0,0.30);
+      --shadow:       rgba(0,0,0,0.45);
+      --shadow-lg:    rgba(0,0,0,0.60);
+      --header-bg:    rgba(9,16,30,0.90);
+      --glass-bg:     rgba(17,29,48,0.80);
+      --glass-border: rgba(99,102,241,0.18);
+      --input-bg:     #0B1220;
+      --orb-a:        rgba(99,102,241,0.22);
+      --orb-b:        rgba(139,92,246,0.15);
+      --orb-c:        rgba(79,70,229,0.10);
+      --step-line:    #1A2840;
+    }
+
+    /* ================================================
+       RESET & BASE
+    ================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background 0.35s ease, color 0.35s ease;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { padding: 96px 0; }
+
+    /* ================================================
+       TYPOGRAPHY
+    ================================================ */
+    h1, h2, h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+    }
+
+    .label-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: clamp(26px, 4.5vw, 40px);
+      margin-bottom: 14px;
+    }
+
+    .section-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 520px;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-head .section-sub {
+      margin: 0 auto;
+    }
+
+    /* ================================================
+       BUTTON SYSTEM
+    ================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      min-height: 44px;
+      white-space: nowrap;
+    }
+
+    .btn-solid {
+      background: var(--accent);
+      color: #fff;
+      padding: 0 22px;
+      height: 42px;
+      font-size: 14px;
+    }
+
+    .btn-solid:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px var(--accent-glow);
+    }
+
+    .btn-solid:active { transform: translateY(0); }
+
+    /* ================================================
+       STICKY HEADER
+    ================================================ */
+    .header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 900;
+      background: var(--header-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.35s, border-color 0.35s, box-shadow 0.35s;
+      padding-top: env(safe-area-inset-top);
+    }
+
+    .header.scrolled {
+      box-shadow: 0 4px 32px var(--shadow);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      height: 64px;
+      gap: 20px;
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 21px;
+      letter-spacing: -0.03em;
+      flex-shrink: 0;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      background: var(--accent);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px var(--accent-glow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .logo:hover .logo-mark {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--accent-glow);
+    }
+
+    .logo-mark svg { width: 17px; height: 17px; color: #fff; }
+
+    .logo-word {
+      background: linear-gradient(130deg, var(--text) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Desktop nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: auto;
+    }
+
+    .nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 8px 13px;
+      border-radius: 9px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+      background: var(--accent-light);
+    }
+
+    .header-end {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Theme toggle */
+    .theme-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .theme-btn svg {
+      width: 17px;
+      height: 17px;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .theme-btn:hover svg { color: var(--accent); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 17px;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+
+    /* Mobile drawer */
+    .drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 850;
+      background: var(--bg);
+      transform: translateX(100%);
+      transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+      padding-top: calc(64px + env(safe-area-inset-top));
+      display: none;
+    }
+
+    .drawer.open { transform: translateX(0); }
+
+    .drawer-body {
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-body a {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+
+    .drawer-body a:hover { color: var(--accent); }
+
+    .drawer-cta {
+      margin-top: 28px;
+      width: 100%;
+      height: 54px;
+      font-size: 16px;
+      border-radius: 14px;
+    }
+
+    /* ================================================
+       HERO
+    ================================================ */
+    .hero {
+      padding: 168px 0 96px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* Background mesh */
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+    }
+
+    .orb-a {
+      width: 700px; height: 700px;
+      background: var(--orb-a);
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      animation: driftA 9s ease-in-out infinite;
+    }
+
+    .orb-b {
+      width: 420px; height: 420px;
+      background: var(--orb-b);
+      bottom: -60px; left: 8%;
+      animation: driftB 11s ease-in-out infinite;
+    }
+
+    .orb-c {
+      width: 380px; height: 380px;
+      background: var(--orb-c);
+      top: 15%; right: 4%;
+      animation: driftC 13s ease-in-out infinite;
+    }
+
+    @keyframes driftA {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(35px); }
+    }
+    @keyframes driftB {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-45px) scale(1.06); }
+    }
+    @keyframes driftC {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(32px) scale(0.93); }
+    }
+
+    /* Dot grid overlay */
+    .hero-canvas::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(var(--border) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.6;
+      mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, black 0%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, black 0%, transparent 100%);
+    }
+
+    .hero-inner { position: relative; z-index: 1; }
+
+    /* Live badge */
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-light);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+      animation: fadeDown 0.55s ease both;
+    }
+
+    .pill-dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.35; }
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 6.5vw, 68px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 22px;
+      animation: fadeDown 0.55s 0.08s ease both;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent) 0%, #818CF8 55%, #A78BFA 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 48px;
+      line-height: 1.75;
+      animation: fadeDown 0.55s 0.16s ease both;
+    }
+
+    /* ── Search glass card ── */
+    .search-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 26px 26px 22px;
+      max-width: 660px;
+      margin: 0 auto 30px;
+      box-shadow: 0 24px 64px var(--shadow-lg);
+      animation: fadeUp 0.55s 0.24s ease both;
+    }
+
+    .fmt-switch {
+      display: flex;
+      background: var(--bg-secondary);
+      border-radius: 11px;
+      padding: 4px;
+      width: fit-content;
+      margin: 0 auto 18px;
+      border: 1px solid var(--border);
+    }
+
+    .fmt-tab {
+      padding: 9px 30px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      min-height: 44px;
+    }
+
+    .fmt-tab.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-wrap {
+      position: relative;
+      flex: 1;
+    }
+
+    .input-ico {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+      line-height: 0;
+    }
+
+    .input-ico svg { width: 19px; height: 19px; }
+
+    .url-field {
+      width: 100%;
+      height: 52px;
+      padding: 0 14px 0 46px;
+      background: var(--input-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14.5px;
+      color: var(--text);
+      font-family: inherit;
+      -webkit-appearance: none;
+      appearance: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .url-field::placeholder { color: var(--text-muted); }
+
+    .url-field:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+      background: var(--card-bg);
+    }
+
+    .btn-go {
+      height: 52px;
+      padding: 0 26px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      flex-shrink: 0;
+      min-height: 52px;
+      transition: all 0.22s ease;
+    }
+
+    .btn-go:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px var(--accent-glow);
+    }
+
+    .btn-go:active { transform: translateY(0); }
+    .btn-go svg { width: 17px; height: 17px; }
+
+    /* Trust row */
+    .trust-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.55s 0.32s ease both;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* ================================================
+       RESULT CARD
+    ================================================ */
+    .result-zone {
+      max-width: 660px;
+      margin: 0 auto 64px;
+      display: none;
+    }
+
+    .result-zone.show { display: block; animation: fadeUp 0.45s ease both; }
+
+    .result-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 20px 60px var(--shadow-lg);
+    }
+
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 52px 20px;
+    }
+
+    .spin {
+      width: 42px; height: 42px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .result-main { display: none; }
+
+    .result-top {
+      display: flex;
+      gap: 16px;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+
+    .result-thumb {
+      width: 110px;
+      height: 74px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-thumb::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-light), transparent 70%);
+    }
+
+    .play-btn {
+      width: 30px; height: 30px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .play-btn svg { width: 11px; height: 11px; color: #fff; margin-left: 2px; }
+
+    .result-info { flex: 1; min-width: 0; }
+
+    .result-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .result-tags { display: flex; gap: 7px; flex-wrap: wrap; }
+
+    .rtag {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .rtag.fmt {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .result-bot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 20px;
+      flex-wrap: wrap;
+    }
+
+    .result-size { font-size: 13px; color: var(--text-muted); }
+
+    .btn-demo {
+      height: 44px;
+      padding: 0 18px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13.5px;
+      border: none;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      opacity: 0.65;
+      cursor: default;
+      text-decoration: none;
+      transition: all 0.22s ease;
+    }
+
+    .btn-demo.ready {
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    .btn-demo.ready:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+
+    .result-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-error {
+      padding: 32px 20px;
+      text-align: center;
+      color: #f87171;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.6;
+    }
+
+    .result-note {
+      text-align: center;
+      padding: 9px 16px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ================================================
+       HOW IT WORKS
+    ================================================ */
+    .how { background: var(--bg-secondary); }
+
+    .steps {
+      max-width: 740px;
+      margin: 0 auto;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 20px;
+      padding: 28px 0;
+      position: relative;
+    }
+
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 36px;
+      top: 96px;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent) 0%, var(--step-line) 100%);
+    }
+
+    .step-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .step-num {
+      width: 52px; height: 52px;
+      background: var(--accent);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 19px;
+      color: #fff;
+      box-shadow: 0 8px 24px var(--accent-glow);
+      flex-shrink: 0;
+    }
+
+    .step-ico {
+      width: 44px; height: 44px;
+      background: var(--accent-light);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-ico svg { width: 20px; height: 20px; color: var(--accent); }
+
+    .step-body { padding-top: 6px; }
+
+    .step-body h3 { font-size: 21px; margin-bottom: 9px; }
+
+    .step-body p {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.72;
+    }
+
+    /* ================================================
+       COMPATIBILITY
+    ================================================ */
+    .compat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .compat-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: all 0.25s ease;
+    }
+
+    .compat-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px var(--shadow);
+    }
+
+    .compat-card.star {
+      grid-column: span 2;
+      border-color: var(--accent);
+      background: linear-gradient(140deg, var(--card-bg) 60%, var(--accent-light));
+    }
+
+    .compat-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .compat-emoji { font-size: 38px; display: block; margin-bottom: 10px; }
+    .compat-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 19px; margin-bottom: 6px; }
+    .compat-desc { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+
+    .compat-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .compat-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .compat-feat {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .compat-feat::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    /* ================================================
+       FORMATS
+    ================================================ */
+    .fmts { background: var(--bg-secondary); }
+
+    .fmt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .fmt-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 32px 28px;
+      text-align: center;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .fmt-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-6px);
+      box-shadow: 0 24px 56px var(--shadow);
+    }
+
+    .fmt-card-ico {
+      width: 70px; height: 70px;
+      background: var(--accent-light);
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      transition: all 0.22s ease;
+    }
+
+    .fmt-card-ico svg { width: 30px; height: 30px; color: var(--accent); transition: color 0.22s; }
+
+    .fmt-card:hover .fmt-card-ico {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+
+    .fmt-card:hover .fmt-card-ico svg { color: #fff; }
+
+    .fmt-card h3 { font-size: 30px; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .fmt-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 22px; }
+
+    .fmt-list { text-align: left; display: flex; flex-direction: column; gap: 9px; margin-bottom: 26px; }
+
+    .fmt-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .fmt-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+
+    .btn-pick {
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      min-height: 44px;
+    }
+
+    .btn-pick:hover { background: var(--accent); color: #fff; box-shadow: 0 6px 20px var(--accent-glow); }
+
+    /* ================================================
+       WHY US
+    ================================================ */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .why-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      transition: all 0.25s ease;
+    }
+
+    .why-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 42px var(--shadow);
+      background: var(--card-hover);
+    }
+
+    .why-ico { font-size: 30px; margin-bottom: 14px; display: block; }
+    .why-card h3 { font-size: 17px; margin-bottom: 8px; }
+    .why-card p { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+
+    /* ================================================
+       FAQ
+    ================================================ */
+    .faq-sec { background: var(--bg-secondary); }
+
+    .faq-list { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.22s;
+    }
+
+    .faq-item.open { border-color: var(--accent); }
+
+    .faq-q {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      cursor: pointer;
+      user-select: none;
+      gap: 14px;
+      min-height: 58px;
+    }
+
+    .faq-q h4 {
+      font-size: 15.5px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .faq-arrow {
+      width: 30px; height: 30px;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .faq-item.open .faq-arrow { background: var(--accent); transform: rotate(180deg); }
+    .faq-arrow svg { width: 15px; height: 15px; color: var(--text-muted); transition: color 0.2s; }
+    .faq-item.open .faq-arrow svg { color: #fff; }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .faq-a-inner {
+      padding: 0 22px 18px;
+      font-size: 14.5px;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    /* ================================================
+       FOOTER
+    ================================================ */
+    footer {
+      background: var(--bg-tertiary);
+      border-top: 1px solid var(--border);
+      padding: 56px 0 40px;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom));
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 44px;
+    }
+
+    .footer-brand .logo { margin-bottom: 14px; }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.72;
+      max-width: 230px;
+    }
+
+    .footer-col h5 {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .footer-col ul { display: flex; flex-direction: column; gap: 9px; }
+
+    .footer-col ul a {
+      font-size: 14px;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .footer-col ul a:hover { color: var(--accent); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-legal {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 680px;
+    }
+
+    .footer-copy { font-size: 13px; color: var(--text-muted); }
+
+    /* ================================================
+       ANIMATIONS & REVEAL
+    ================================================ */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.on { opacity: 1; transform: translateY(0); }
+
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+
+    /* Focus ring */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 5px;
+    }
+
+    /* ================================================
+       RESPONSIVE — TABLET
+    ================================================ */
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: span 2; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ================================================
+       RESPONSIVE — MOBILE (≤768px)
+    ================================================ */
+    @media (max-width: 768px) {
+      .nav, .header-cta { display: none; }
+      .hamburger { display: flex; }
+      .drawer { display: block; }
+
+      section { padding: 72px 0; }
+
+      .hero {
+        padding: 120px 0 72px;
+        text-align: left;
+      }
+
+      .hero-pill { margin-bottom: 16px; }
+      .hero h1 { font-size: 32px; }
+      .hero-sub { margin: 0 0 36px; font-size: 16px; max-width: 100%; }
+
+      .search-card { padding: 18px 16px 16px; border-radius: var(--radius-lg); margin-bottom: 24px; }
+
+      .input-row { flex-direction: column; }
+      .btn-go { width: 100%; justify-content: center; }
+
+      .trust-row { justify-content: flex-start; gap: 16px; }
+
+      .compat-grid { grid-template-columns: 1fr; }
+      .compat-card.star { grid-column: span 1; }
+      .compat-list { grid-template-columns: 1fr; }
+
+      .fmt-grid { grid-template-columns: 1fr; }
+
+      .why-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .footer-brand { grid-column: span 2; }
+
+      .result-top { flex-direction: column; }
+      .result-thumb { width: 100%; height: 140px; }
+
+      .step { grid-template-columns: 60px 1fr; gap: 14px; }
+      .step-num { width: 46px; height: 46px; border-radius: 13px; font-size: 17px; }
+      .step:not(:last-child)::after { left: 30px; top: 82px; }
+    }
+
+    /* ================================================
+       RESPONSIVE — iPhone (375–430px)
+    ================================================ */
+    @media (max-width: 430px) {
+      .container { padding: 0 18px; }
+      .hero h1 { font-size: 28px; }
+      .why-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-brand { grid-column: span 1; }
+      .fmt-card { padding: 24px 20px; }
+      .faq-q { padding: 16px 18px; }
+      .faq-a-inner { padding: 0 18px 16px; }
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 7px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+  </style>
+</head>
+
+<body>
+
+<!-- =============================================
+     HEADER
+============================================= -->
+<header class="header" id="header">
+  <div class="container">
+    <div class="header-inner">
+      <!-- Logo -->
+      <a href="#hero" class="logo" aria-label="TubeGrab — Accueil">
+        <div class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 4v16M5 13l7 7 7-7"/>
+          </svg>
+        </div>
+        <span class="logo-word">TubeGrab</span>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="#hero">Accueil</a>
+        <a href="#how">Comment ça marche</a>
+        <a href="#formats">Formats</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="header-end">
+        <!-- Theme toggle -->
+        <button class="theme-btn" id="themeBtn" aria-label="Changer le thème">
+          <svg id="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg id="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+
+        <!-- CTA (desktop) -->
+        <a href="#hero" class="btn btn-solid header-cta">Télécharger maintenant</a>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamBtn" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-body">
+    <a href="#hero" onclick="closeDrawer()">Accueil</a>
+    <a href="#how" onclick="closeDrawer()">Comment ça marche</a>
+    <a href="#formats" onclick="closeDrawer()">Formats</a>
+    <a href="#faq" onclick="closeDrawer()">FAQ</a>
+    <a href="#hero" class="btn btn-solid drawer-cta" onclick="closeDrawer()">Télécharger maintenant</a>
+  </div>
+</div>
+
+<main>
+
+<!-- =============================================
+     HERO
+============================================= -->
+<section id="hero" class="hero">
+  <div class="hero-canvas" aria-hidden="true">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="orb orb-c"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-inner">
+      <!-- Badge -->
+      <div class="hero-pill" aria-label="Service gratuit, rapide et simple">
+        <span class="pill-dot" aria-hidden="true"></span>
+        Gratuit · Rapide · Simple
+      </div>
+
+      <!-- Headline -->
+      <h1>
+        Téléchargez vos vidéos<br>
+        YouTube en <em>MP4 ou MP3</em>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="hero-sub">
+        Collez un lien, choisissez un format, récupérez votre fichier en quelques secondes.
+        Compatible PC, Android et iPhone.
+      </p>
+
+      <!-- Search card -->
+      <div class="search-card" role="search" aria-label="Téléchargeur YouTube">
+        <!-- Format toggle -->
+        <div class="fmt-switch" role="group" aria-label="Sélectionner le format">
+          <button class="fmt-tab active" data-fmt="MP4" onclick="pickFmt('MP4',this)">
+            MP4 &nbsp;— Vidéo
+          </button>
+          <button class="fmt-tab" data-fmt="MP3" onclick="pickFmt('MP3',this)">
+            MP3 &nbsp;— Audio
+          </button>
+        </div>
+
+        <!-- URL + button -->
+        <form id="dlForm" onsubmit="handleDL(event)" novalidate>
+          <div class="input-row">
+            <div class="input-wrap">
+              <span class="input-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                  <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/>
+                </svg>
+              </span>
+              <input
+                type="url"
+                class="url-field"
+                id="urlField"
+                placeholder="https://www.youtube.com/watch?v=..."
+                aria-label="Coller l'URL YouTube ici"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="none"
+                spellcheck="false"
+                inputmode="url"
+              >
+            </div>
+            <button type="submit" class="btn-go" aria-label="Lancer le téléchargement">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+              Télécharger
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Result zone -->
+      <div class="result-zone" id="resultZone" aria-live="polite" aria-label="Résultat du téléchargement">
+        <div class="result-box">
+          <!-- Loading -->
+          <div class="loading-state" id="loadState">
+            <div class="spin" role="status" aria-label="Chargement en cours"></div>
+            <p class="loading-label">Analyse de la vidéo en cours…</p>
+          </div>
+          <!-- Result -->
+          <div class="result-main" id="resultMain">
+            <div class="result-top">
+              <div class="result-thumb" id="rThumb" aria-hidden="true">
+                <div class="play-btn" id="rPlayBtn">
+                  <svg viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+              </div>
+              <div class="result-info">
+                <p class="result-name" id="rName">Vidéo YouTube — Titre de démonstration</p>
+                <div class="result-tags">
+                  <span class="rtag fmt" id="rFmt">MP4</span>
+                  <span class="rtag" id="rQual">1080p HD</span>
+                  <span class="rtag" id="rDur">5:32</span>
+                </div>
+              </div>
+            </div>
+            <div class="result-bot">
+              <span class="result-size" id="rSize">Taille estimée : 142 Mo</span>
+              <a class="btn-demo" id="dlBtn" href="#" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                Télécharger
+              </a>
+            </div>
+            <div class="result-note">Aperçu de démonstration — intégration backend à venir</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust badges -->
+      <div class="trust-row" role="list" aria-label="Points forts du service">
+        <span class="trust-item" role="listitem"><span aria-hidden="true">⚡</span> Rapide</span>
+        <span class="trust-item" role="listitem"><span aria-hidden="true">📱</span> Compatible mobile</span>
+        <span class="trust-item" role="listitem"><span aria-hidden="true">✓</span> Facile à utiliser</span>
+        <span class="trust-item" role="listitem"><span aria-hidden="true">🔓</span> Aucune installation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     HOW IT WORKS
+============================================= -->
+<section class="how" id="how" aria-labelledby="how-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="label-pill">Guide rapide</div>
+      <h2 class="section-title" id="how-title">Comment ça marche</h2>
+      <p class="section-sub">Téléchargez n'importe quelle vidéo YouTube en trois étapes simples.</p>
+    </div>
+
+    <div class="steps">
+      <!-- Step 1 -->
+      <div class="step reveal">
+        <div class="step-col">
+          <div class="step-num" aria-hidden="true">1</div>
+          <div class="step-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+          </div>
+        </div>
+        <div class="step-body">
+          <h3>Collez le lien YouTube</h3>
+          <p>Ouvrez YouTube sur votre appareil, copiez l'URL depuis la barre d'adresse ou le bouton "Partager", puis collez-la dans le champ de recherche de TubeGrab.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step reveal d1">
+        <div class="step-col">
+          <div class="step-num" aria-hidden="true">2</div>
+          <div class="step-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="step-body">
+          <h3>Choisissez MP3 ou MP4</h3>
+          <p>Sélectionnez votre format : <strong>MP4</strong> pour conserver la vidéo complète en haute définition, ou <strong>MP3</strong> pour extraire l'audio et l'écouter hors ligne.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step reveal d2">
+        <div class="step-col">
+          <div class="step-num" aria-hidden="true">3</div>
+          <div class="step-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="step-body">
+          <h3>Téléchargez sur PC ou téléphone</h3>
+          <p>Cliquez sur "Télécharger" et récupérez votre fichier directement — sur ordinateur, iPhone, Android ou tablette. Aucune installation nécessaire.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     COMPATIBILITY
+============================================= -->
+<section id="compat" aria-labelledby="compat-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="label-pill">Compatibilité</div>
+      <h2 class="section-title" id="compat-title">Fonctionne partout,&nbsp;même sur iPhone</h2>
+      <p class="section-sub">Interface mobile-first conçue pour offrir la meilleure expérience sur tous vos appareils.</p>
+    </div>
+
+    <div class="compat-grid">
+      <!-- iPhone — starred -->
+      <div class="compat-card star reveal">
+        <div class="compat-top">
+          <div>
+            <span class="compat-emoji" aria-hidden="true">📱</span>
+            <div class="compat-name">iPhone — iOS</div>
+            <p class="compat-desc">Interface spécialement optimisée pour Safari et tous les navigateurs iOS. Boutons larges, zones tactiles confortables, structure verticale fluide sur petit écran.</p>
+          </div>
+          <span class="compat-badge">Optimisé</span>
+        </div>
+        <div class="compat-list">
+          <div class="compat-feat">Interface adaptée au petit écran</div>
+          <div class="compat-feat">Boutons larges (44px minimum)</div>
+          <div class="compat-feat">Compatible Safari iOS</div>
+          <div class="compat-feat">Structure verticale propre</div>
+          <div class="compat-feat">Safe areas respectées (notch)</div>
+          <div class="compat-feat">Téléchargement natif iOS</div>
+        </div>
+      </div>
+
+      <!-- PC -->
+      <div class="compat-card reveal d1">
+        <span class="compat-emoji" aria-hidden="true">💻</span>
+        <div class="compat-name">PC — Windows &amp; Mac</div>
+        <p class="compat-desc">Fonctionne sur Chrome, Firefox, Safari et Edge. Téléchargement direct dans votre dossier habituel, sans aucune extension.</p>
+      </div>
+
+      <!-- Android -->
+      <div class="compat-card reveal d2">
+        <span class="compat-emoji" aria-hidden="true">🤖</span>
+        <div class="compat-name">Android</div>
+        <p class="compat-desc">Compatible avec Chrome, Firefox et tous les navigateurs Android. Fichier enregistré directement dans votre gestionnaire de fichiers natif.</p>
+      </div>
+
+      <!-- Tablette -->
+      <div class="compat-card reveal d3" style="grid-column: span 2">
+        <span class="compat-emoji" aria-hidden="true">📟</span>
+        <div class="compat-name">Tablette — iPad &amp; Android</div>
+        <p class="compat-desc">Mise en page adaptée aux grands écrans tactiles. Profitez d'une expérience confortable sur iPad et tablettes Android, avec une interface qui exploite l'espace disponible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     FORMATS
+============================================= -->
+<section class="fmts" id="formats" aria-labelledby="fmts-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="label-pill">Formats disponibles</div>
+      <h2 class="section-title" id="fmts-title">MP3 ou MP4 — à vous de choisir</h2>
+      <p class="section-sub">Deux formats pour répondre à tous vos besoins, de la vidéo complète à l'audio seul.</p>
+    </div>
+
+    <div class="fmt-grid">
+      <!-- MP3 -->
+      <div class="fmt-card reveal" onclick="selectFmtAndScroll('MP3')" role="button" tabindex="0" aria-label="Choisir le format MP3">
+        <div class="fmt-card-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"/>
+            <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+          </svg>
+        </div>
+        <h3>MP3</h3>
+        <p class="fmt-sub">Format audio universel</p>
+        <div class="fmt-list" role="list">
+          <div class="fmt-item" role="listitem"><span class="fmt-dot" aria-hidden="true"></span> Podcasts et interviews</div>
+          <div class="fmt-item" role="listitem"><span class="fmt-dot" aria-hidden="true"></span> Musique et playlists</div>
+          <div class="fmt-item" role="listitem"><span class="fmt-dot" aria-hidden="true"></span> Écoute hors ligne</div>
+          <div class="fmt-item" role="listitem"><span class="fmt-dot" aria-hidden="true"></span> Fichier léger et compact</div>
+        </div>
+        <button class="btn-pick" tabindex="-1" aria-hidden="true">Choisir MP3</button>
+      </div>
+
+      <!-- MP4 -->
+      <div class="fmt-card reveal d1" onclick="selectFmtAndScroll('MP4')" role="button" tabindex="0" aria-label="Choisir le format MP4">
+        <div class="fmt-card-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+        </div>
+        <h3>MP4</h3>
+        <p class="fmt-sub">Vidéo haute définition</p>
+        <div class="fmt-list" role="list">
+          <div class="fmt-item" role="listitem"><span class="fmt-dot" aria-hidden="true"></span> Vidéos complètes HD</div>
+          <div class="fmt-item" role="listitem"><span class="fmt-dot" aria-hidden="true"></span> Tutoriels et formations</div>
+          <div class="fmt-item" role="listitem"><span class="fmt-dot" aria-hidden="true"></span> Clips et contenus visuels</div>
+          <div class="fmt-item" role="listitem"><span class="fmt-dot" aria-hidden="true"></span> Compatible tous les lecteurs</div>
+        </div>
+        <button class="btn-pick" tabindex="-1" aria-hidden="true">Choisir MP4</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     WHY US
+============================================= -->
+<section id="why" aria-labelledby="why-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="label-pill">Nos avantages</div>
+      <h2 class="section-title" id="why-title">Pourquoi choisir TubeGrab</h2>
+      <p class="section-sub">Essayé par des milliers d'utilisateurs. L'outil le plus simple, le plus rapide, le plus fiable.</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <span class="why-ico" aria-hidden="true">⚡</span>
+        <h3>Rapide</h3>
+        <p>Téléchargement en quelques secondes. Pas d'attente, pas de file d'attente, pas de limite de vitesse artificielle.</p>
+      </div>
+      <div class="why-card reveal d1">
+        <span class="why-ico" aria-hidden="true">🎯</span>
+        <h3>Simple</h3>
+        <p>Interface épurée, sans publicité agressive ni distraction. Une seule action, un seul résultat, immédiatement.</p>
+      </div>
+      <div class="why-card reveal d2">
+        <span class="why-ico" aria-hidden="true">📱</span>
+        <h3>Mobile-first</h3>
+        <p>Conçu dès le départ pour iOS et Android. Interface fluide, boutons larges, expérience tactile optimisée.</p>
+      </div>
+      <div class="why-card reveal d1">
+        <span class="why-ico" aria-hidden="true">🖱️</span>
+        <h3>En quelques clics</h3>
+        <p>Aucun compte requis, aucune inscription, aucune installation. Ouvrez la page et c'est parti immédiatement.</p>
+      </div>
+      <div class="why-card reveal d2">
+        <span class="why-ico" aria-hidden="true">✨</span>
+        <h3>Fluide sur iOS</h3>
+        <p>Expérience optimisée pour Safari iPhone. Boutons natifs, zones tactiles correctes, téléchargement direct.</p>
+      </div>
+      <div class="why-card reveal d3">
+        <span class="why-ico" aria-hidden="true">🔒</span>
+        <h3>Design rassurant</h3>
+        <p>Interface propre, professionnelle et sécurisée. Aucun logiciel malveillant, aucun traceur intrusif.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     FAQ
+============================================= -->
+<section class="faq-sec" id="faq" aria-labelledby="faq-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="label-pill">Questions fréquentes</div>
+      <h2 class="section-title" id="faq-title">Vous avez des questions&nbsp;?</h2>
+      <p class="section-sub">Tout ce que vous devez savoir sur TubeGrab, répondu clairement.</p>
+    </div>
+
+    <div class="faq-list" role="list">
+
+      <div class="faq-item reveal" role="listitem">
+        <div class="faq-q" onclick="faqToggle(this)" role="button" tabindex="0" aria-expanded="false">
+          <h4>Est-ce que ça fonctionne sur iPhone ?</h4>
+          <div class="faq-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            Oui, TubeGrab est spécialement optimisé pour iPhone. L'interface est conçue pour Safari iOS avec des boutons larges (44px minimum), des zones tactiles confortables et une structure verticale propre adaptée aux petits écrans. Le téléchargement fonctionne directement depuis votre navigateur — aucune application à installer.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal d1" role="listitem">
+        <div class="faq-q" onclick="faqToggle(this)" role="button" tabindex="0" aria-expanded="false">
+          <h4>Puis-je télécharger en MP3 ?</h4>
+          <div class="faq-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            Absolument. Sélectionnez "MP3 — Audio" dans le sélecteur de format avant de lancer le téléchargement. Vous obtiendrez la piste audio de la vidéo en qualité optimale — parfait pour écouter de la musique, des podcasts ou des conférences hors connexion.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal d2" role="listitem">
+        <div class="faq-q" onclick="faqToggle(this)" role="button" tabindex="0" aria-expanded="false">
+          <h4>Puis-je utiliser le service sur PC ?</h4>
+          <div class="faq-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            Oui, TubeGrab fonctionne parfaitement sur tous les navigateurs desktop : Chrome, Firefox, Safari et Edge, sur Windows et macOS. Le fichier est enregistré directement dans votre dossier "Téléchargements".
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal d1" role="listitem">
+        <div class="faq-q" onclick="faqToggle(this)" role="button" tabindex="0" aria-expanded="false">
+          <h4>Quels formats sont disponibles ?</h4>
+          <div class="faq-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            TubeGrab propose deux formats : <strong>MP4</strong> pour la vidéo complète (disponible en 1080p HD, 720p et 480p selon la source) et <strong>MP3</strong> pour l'audio seul en haute qualité (320 kbps). D'autres formats comme WebM et M4A sont prévus prochainement.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item reveal d2" role="listitem">
+        <div class="faq-q" onclick="faqToggle(this)" role="button" tabindex="0" aria-expanded="false">
+          <h4>Est-ce que je dois installer une application ?</h4>
+          <div class="faq-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            Non, aucune installation n'est nécessaire. TubeGrab fonctionne entièrement dans votre navigateur web — sur iPhone, Android, PC ou tablette. Pas d'application à télécharger, pas de compte à créer, pas d'extension à installer. Ouvrez la page et commencez immédiatement.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- =============================================
+     FOOTER
+============================================= -->
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Brand -->
+      <div class="footer-brand">
+        <a href="#hero" class="logo" aria-label="TubeGrab">
+          <div class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 4v16M5 13l7 7 7-7"/>
+            </svg>
+          </div>
+          <span class="logo-word">TubeGrab</span>
+        </a>
+        <p>Interface simple et rapide pour télécharger vos vidéos YouTube. Aucune installation nécessaire.</p>
+      </div>
+
+      <!-- Service -->
+      <div class="footer-col">
+        <h5>Service</h5>
+        <ul>
+          <li><a href="#how">Comment ça marche</a></li>
+          <li><a href="#formats">Formats MP3 &amp; MP4</a></li>
+          <li><a href="#compat">Compatibilité</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <!-- Légal -->
+      <div class="footer-col">
+        <h5>Légal</h5>
+        <ul>
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Confidentialité</a></li>
+          <li><a href="#">Conditions d'utilisation</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Signaler un problème</a></li>
+          <li><a href="#">Partenariats</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-legal">
+        ⚠️ Utilisez ce service uniquement pour les contenus que vous avez le droit de télécharger et dans le respect des conditions d'utilisation de la plateforme concernée. TubeGrab n'encourage pas et décline toute responsabilité en cas d'utilisation contraire aux droits d'auteur ou aux règles de YouTube.
+      </p>
+      <p class="footer-copy">© 2024 TubeGrab. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- =============================================
+     JAVASCRIPT
+============================================= -->
+<script>
+/* Toutes les variables en var pour éviter le temporal dead zone dans le preview */
+var activeFmt  = 'MP4';
+var drawerOpen = false;
+
+/* ── Fonctions exposées globalement (appelées depuis les attributs HTML onclick/onsubmit) ── */
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('ico-sun').style.display  = t === 'dark' ? 'block' : 'none';
+  document.getElementById('ico-moon').style.display = t === 'dark' ? 'none'  : 'block';
+}
+
+function pickFmt(fmt, btn) {
+  activeFmt = fmt;
+  document.querySelectorAll('.fmt-tab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function closeDrawer() {
+  drawerOpen = false;
+  document.getElementById('hamBtn').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer').setAttribute('aria-hidden', 'true');
+  document.getElementById('hamBtn').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
+function toggleDrawer() {
+  drawerOpen = !drawerOpen;
+  document.getElementById('hamBtn').classList.toggle('open', drawerOpen);
+  document.getElementById('drawer').classList.toggle('open', drawerOpen);
+  document.getElementById('drawer').setAttribute('aria-hidden', String(!drawerOpen));
+  document.getElementById('hamBtn').setAttribute('aria-expanded', String(drawerOpen));
+  document.body.style.overflow = drawerOpen ? 'hidden' : '';
+}
+
+function faqToggle(qEl) {
+  var item = qEl.closest('.faq-item');
+  var ans  = item.querySelector('.faq-a');
+  var isOpen = item.classList.contains('open');
+
+  document.querySelectorAll('.faq-item.open').forEach(function(i) {
+    i.classList.remove('open');
+    i.querySelector('.faq-a').style.maxHeight = '0';
+    i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+  });
+
+  if (!isOpen) {
+    item.classList.add('open');
+    ans.style.maxHeight = ans.scrollHeight + 'px';
+    qEl.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function selectFmtAndScroll(fmt) {
+  activeFmt = fmt;
+  document.querySelectorAll('.fmt-tab').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.fmt === fmt);
+  });
+  document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(function() { document.getElementById('urlField').focus(); }, 600);
+}
+
+/* Extrait l'ID vidéo YouTube depuis n'importe quel format d'URL */
+function extractVideoId(url) {
+  var patterns = [
+    /[?&]v=([A-Za-z0-9_-]{11})/,
+    /youtu\.be\/([A-Za-z0-9_-]{11})/,
+    /embed\/([A-Za-z0-9_-]{11})/,
+    /shorts\/([A-Za-z0-9_-]{11})/,
+  ];
+  for (var i = 0; i < patterns.length; i++) {
+    var m = url.match(patterns[i]);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+function showResultCard(videoId, dlUrl) {
+  var load   = document.getElementById('loadState');
+  var result = document.getElementById('resultMain');
+
+  load.style.display   = 'none';
+  result.style.display = 'block';
+
+  /* Miniature directement depuis le CDN YouTube — pas de CORS */
+  document.getElementById('rThumb').innerHTML =
+    '<img src="https://i.ytimg.com/vi/' + videoId + '/hqdefault.jpg" alt="Miniature" loading="lazy">';
+
+  document.getElementById('rFmt').textContent  = activeFmt;
+  document.getElementById('rQual').textContent = activeFmt === 'MP4' ? '1080p HD' : '320 kbps';
+  document.getElementById('rDur').textContent  = '—';
+  document.getElementById('rSize').textContent = 'Prêt à télécharger';
+  document.getElementById('rName').textContent = 'Vidéo YouTube';
+
+  /* Bouton de téléchargement actif */
+  var dlBtn = document.getElementById('dlBtn');
+  dlBtn.href = dlUrl;
+  dlBtn.classList.add('ready');
+  dlBtn.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">' +
+    '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>' +
+    ' Télécharger en ' + activeFmt;
+
+  var noteEl = document.querySelector('.result-note');
+  if (noteEl) noteEl.style.display = 'none';
+
+  /* Tentative de récupération du titre en arrière-plan (silencieuse si CORS bloqué) */
+  fetch('https://noembed.com/embed?url=' + encodeURIComponent('https://www.youtube.com/watch?v=' + videoId))
+    .then(function(r) { return r.json(); })
+    .then(function(d) { if (d && d.title) document.getElementById('rName').textContent = d.title; })
+    .catch(function() { /* silencieux */ });
+}
+
+function handleDL(e) {
+  e.preventDefault();
+  var field = document.getElementById('urlField');
+  var url   = field.value.trim();
+
+  if (!url) {
+    field.style.borderColor = 'var(--accent)';
+    field.focus();
+    setTimeout(function() { field.style.borderColor = ''; }, 1800);
+    return;
+  }
+
+  /* Validation locale — pas de réseau */
+  var videoId = extractVideoId(url);
+  if (!videoId) {
+    field.style.borderColor = '#f87171';
+    field.focus();
+    setTimeout(function() { field.style.borderColor = ''; }, 2000);
+    document.getElementById('resultZone').classList.add('show');
+    document.getElementById('loadState').style.display = 'none';
+    document.getElementById('resultMain').style.display = 'block';
+    document.getElementById('resultMain').innerHTML =
+      '<div class="result-error">Collez une URL YouTube valide<br>' +
+      '<small style="opacity:.7">Ex : https://www.youtube.com/watch?v=dQw4w9WgXcQ</small></div>';
+    return;
+  }
+
+  var zone = document.getElementById('resultZone');
+  var load = document.getElementById('loadState');
+  var result = document.getElementById('resultMain');
+
+  zone.classList.add('show');
+  load.style.display   = 'flex';
+  load.innerHTML       = '<div class="spin"></div><p class="loading-label">Génération du lien de téléchargement…</p>';
+  result.style.display = 'none';
+
+  setTimeout(function() { zone.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 80);
+
+  /* URL du backend — changer en production */
+  var API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : (window.location.protocol + '//' + window.location.hostname);
+
+  /* Étape 1 : infos vidéo via le backend */
+  fetch(API_BASE + '/api/info?url=' + encodeURIComponent('https://www.youtube.com/watch?v=' + videoId))
+    .then(function(r) {
+      if (!r.ok) return r.json().then(function(d) { throw new Error(d.error || 'Erreur serveur'); });
+      return r.json();
+    })
+    .then(function(info) {
+      /* Mettre à jour le titre avec l'info réelle */
+      load.innerHTML = '<div class="spin"></div><p class="loading-label">Préparation du téléchargement…</p>';
+
+      /* Afficher la carte résultat */
+      var dlUrl = API_BASE + '/api/download?url='
+                + encodeURIComponent('https://www.youtube.com/watch?v=' + videoId)
+                + '&format=' + activeFmt.toLowerCase();
+
+      showResultCard(videoId, dlUrl);
+
+      /* Mettre à jour le titre et la durée avec les vraies données */
+      if (info.title) document.getElementById('rName').textContent = info.title;
+      if (info.duration) document.getElementById('rDur').textContent = info.duration;
+      if (info.thumbnail) {
+        document.getElementById('rThumb').innerHTML =
+          '<img src="' + info.thumbnail + '" alt="Miniature" loading="lazy">';
+      }
+    })
+    .catch(function(err) {
+      load.style.display   = 'none';
+      result.style.display = 'block';
+      var isOffline = err.message.indexOf('fetch') !== -1 || err.message.indexOf('Failed') !== -1 || err.message.indexOf('NetworkError') !== -1;
+      result.innerHTML =
+        '<div class="result-error">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"' +
+        ' style="margin:0 auto 12px;display:block;color:#f87171">' +
+        '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>' +
+        '<line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+        (isOffline
+          ? '<strong>Backend non démarré</strong><br><br>Lance le serveur dans un terminal :<br>' +
+            '<code style="background:var(--bg-secondary);padding:6px 12px;border-radius:6px;display:inline-block;margin-top:8px;font-size:13px">' +
+            'cd ~/Desktop/Youtube && venv/bin/python3 app.py</code>'
+          : '<strong>' + err.message + '</strong>') +
+        '</div>';
+    });
+}
+
+/* ── Init au chargement de la page ── */
+document.addEventListener('DOMContentLoaded', function() {
+
+  /* Thème */
+  var saved = localStorage.getItem('tg-theme') || 'dark';
+  applyTheme(saved);
+
+  document.getElementById('themeBtn').addEventListener('click', function() {
+    var t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(t);
+    localStorage.setItem('tg-theme', t);
+  });
+
+  /* Header shadow */
+  window.addEventListener('scroll', function() {
+    document.getElementById('header').classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
+
+  /* Hamburger */
+  document.getElementById('hamBtn').addEventListener('click', toggleDrawer);
+
+  /* Escape ferme le drawer */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && drawerOpen) closeDrawer();
+  });
+
+  /* Keyboard sur les cartes format */
+  document.querySelectorAll('.fmt-card').forEach(function(card) {
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+    });
+  });
+
+  /* Keyboard FAQ */
+  document.querySelectorAll('.faq-q').forEach(function(q) {
+    q.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); faqToggle(q); }
+    });
+  });
+
+  /* Scroll reveal */
+  var ro = new IntersectionObserver(function(entries) {
+    entries.forEach(function(en) {
+      if (en.isIntersecting) { en.target.classList.add('on'); ro.unobserve(en.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+});
+</script>
+
+</body>
+</html>
